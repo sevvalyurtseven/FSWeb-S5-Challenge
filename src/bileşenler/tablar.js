@@ -1,3 +1,5 @@
+import axios from "axios";
+
 const Tablar = (konu) => {
   // GÖREV 3
   // ---------------------
@@ -13,7 +15,17 @@ const Tablar = (konu) => {
   //   <div class="tab">teknoloji</div>
   // </div>
   //
-}
+  const div = document.createElement("div");
+  div.classList.add("topics");
+
+  konu.forEach((tablar) => {
+    const tab = document.createElement("div");
+    tab.classList.add("tab");
+    tab.textContent = tablar;
+    div.append(tab);
+  });
+  return div;
+};
 
 const tabEkleyici = (secici) => {
   // GÖREV 4
@@ -23,6 +35,13 @@ const tabEkleyici = (secici) => {
   // Yanıtın içindeki konu dizisini bulun ve Tablar bileşenini kullanarak tabları oluşturun.
   // Tabları, fonksiyona iletilen seçiciyle eşleşen DOM'daki öğeye ekleyin.
   //
+  axios.get(`http://localhost:5001/api/konular`).then((response) => {
+    console.log(response.data.konular);
+
+    const newTab = document.querySelector(secici);
+    const tablar = Tablar(response.data.konular);
+    newTab.append(tablar);
+  });
 }
 
-export { Tablar, tabEkleyici }
+export { Tablar, tabEkleyici };
