@@ -19,34 +19,50 @@ const Card = (makale) => {
   //   </div>
   // </div>
   //
+
+  // class'ı card olan bir div elementi olusturduk.
+
   const div = document.createElement("div");
   div.classList.add("card");
+
+  // class'ı headline olan bir div elementi olusturduk ve textContent ile icerisine anabaslik parametresini verdik.
 
   const headLine = document.createElement("div");
   headLine.classList.add("headline");
   headLine.textContent = makale.anabaslik;
 
+  // class'ı author olan bir div elementi olusturduk.
+
   const author = document.createElement("div");
   author.classList.add("author");
+
+  // class'ı img-container olan bir div elementi olusturduk.
 
   const imgContainer = document.createElement("div");
   imgContainer.classList.add("img-container");
 
+  // bir img elementi olusturduk ve source bilgisini yazarFoto parametresi ile verdik.
+
   const img = document.createElement("img");
   img.src = makale.yazarFoto;
 
-  const yazarAdi = document.createElement("span");
-  yazarAdi.textContent = makale.yazarAdi;
+  //bir span elementi olusturduk ve textContent ile icerisine yazarAdi parametresini verdik.
 
-  div.append(headLine, author);
-  author.append(imgContainer, yazarAdi);
-  imgContainer.append(img);
+  const yazarAdi = document.createElement("span");
+  yazarAdi.textContent = makale.yazarAdi + " tarafından";
+
+  imgContainer.append(img); //imgContainer elementinin icerisine img elementini ekledik.
+
+  author.append(imgContainer, yazarAdi); //author elementinin icerisine imgContainer ve yazarAdi elementlerini ekledik.
+
+  div.append(headLine, author); //div elementinin icerisine headLine ve author elementlerini ekledik.
 
   div.addEventListener("click", () => {
     console.log(makale.anabaslik);
   });
+
   return div;
-}
+};
 
 const cardEkleyici = (secici) => {
   // GÖREV 6
@@ -57,14 +73,23 @@ const cardEkleyici = (secici) => {
   // Card bileşenini kullanarak yanıttaki her makale nesnesinden bir kart oluşturun.
   // Her cardı, fonksiyona iletilen seçiciyle eşleşen DOM'daki öğeye ekleyin.
   //
-  const newCard = document.querySelector(secici);
-  axios.get("http://localhost:5001/api/makaleler").then((response) => {
-    for(let key in response.data.makaleler){
-    for (let i = 0; i < response.data.makaleler[key].length; i++) {
-      newCard.append(Card(response.data.makaleler[key][i]));
-    }
-  } 
-  });
+
+  axios
+    .get("http://localhost:5001/api/makaleler")
+    .then((response) => {
+      //console.log(response.data.makaleler);
+      const newCard = document.querySelector(secici);
+      const makaleler = response.data.makaleler;
+      for (let key in makaleler) {
+        makaleler[key].forEach((element) => {
+          const card = Card(element);
+          newCard.append(card);
+        });
+      }
+    })
+    .catch((error) => {
+      console.err(error);
+    });
 };
 
-export { Card, cardEkleyici }
+export { Card, cardEkleyici };

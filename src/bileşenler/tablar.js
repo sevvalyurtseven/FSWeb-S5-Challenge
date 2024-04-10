@@ -15,14 +15,19 @@ const Tablar = (konu) => {
   //   <div class="tab">teknoloji</div>
   // </div>
   //
+
+  // class'ı topics olan bir div elementi olusturduk.
+
   const div = document.createElement("div");
   div.classList.add("topics");
 
-  konu.forEach((tablar) => {
-    const tab = document.createElement("div");
-    tab.classList.add("tab");
-    tab.textContent = tablar;
-    div.append(tab);
+  // forEach ile her bir konuyu class'ı tab olan bir div elementi olarak olusturduk textContent ile icerisindeki metini ekledik. Daha sonra her bir konuyu div elementine ekledik.
+
+  konu.forEach((element) => {
+    const divTab = document.createElement("div");
+    divTab.classList.add("tab");
+    divTab.textContent = element;
+    div.append(divTab);
   });
   return div;
 };
@@ -35,13 +40,18 @@ const tabEkleyici = (secici) => {
   // Yanıtın içindeki konu dizisini bulun ve Tablar bileşenini kullanarak tabları oluşturun.
   // Tabları, fonksiyona iletilen seçiciyle eşleşen DOM'daki öğeye ekleyin.
   //
-  axios.get(`http://localhost:5001/api/konular`).then((response) => {
-    console.log(response.data.konular);
+  axios
+    .get(`http://localhost:5001/api/konular`)
+    .then((response) => {
+      //console.log(response.data.konular);
 
-    const newTab = document.querySelector(secici);
-    const tablar = Tablar(response.data.konular);
-    newTab.append(tablar);
-  });
-}
+      const newTab = document.querySelector(secici);
+      const tablar = Tablar(response.data.konular);
+      newTab.append(tablar);
+    })
+    .catch((error) => {
+      console.err(error);
+    });
+};
 
 export { Tablar, tabEkleyici };
