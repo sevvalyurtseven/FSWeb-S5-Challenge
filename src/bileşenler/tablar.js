@@ -51,6 +51,9 @@ const tabEkleyici = (secici) => {
     })
     .catch((error) => {
       console.err(error);
+    })
+    .finally(() => {
+      console.log("İşlem tamamlandı");
     });
 };
 
